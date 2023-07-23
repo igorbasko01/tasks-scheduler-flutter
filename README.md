@@ -1,3 +1,3 @@
 # Tasks Scheduler
 
-A tasks scheduler flutter app
+A tasks scheduler flutter app.
