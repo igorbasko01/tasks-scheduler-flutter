@@ -10,8 +10,7 @@ class SecureTokenStorage implements TokenStorage {
   SecureTokenStorage({required this.secureStorage});
 
   @override
-  Future<void> saveToken(String key, String value) {
-    // TODO: implement saveToken
-    throw UnimplementedError();
+  Future<void> saveToken(String key, String value) async {
+    await secureStorage.write(key: key, value: value);
   }
 }

@@ -24,6 +24,8 @@ void main() {
   group('TokenStorage', () {
     test('stores a token', () async {
       await tokenStorage.saveToken('token', 'test_token');
+
+      verify(mockSecureStorage.write(key: 'token', value: 'test_token')).called(1);
     });
   });
 }
