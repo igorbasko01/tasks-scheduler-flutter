@@ -14,6 +14,7 @@ void main() {
   setUp(() {
     mockSecureStorage = MockFlutterSecureStorage();
     when(mockSecureStorage.read(key: 'token')).thenAnswer((_) async => 'test_token');
+    when(mockSecureStorage.read(key: 'non_token')).thenAnswer((_) async => null);
     when(mockSecureStorage.readAll()).thenAnswer((_) async => {'token': 'test_token'});
     when(mockSecureStorage.write(key: 'token', value: anyNamed('value'))).thenAnswer((_) async {});
     when(mockSecureStorage.delete(key: 'token')).thenAnswer((_) async {});
@@ -26,6 +27,13 @@ void main() {
       await tokenStorage.saveToken('token', 'test_token');
 
       verify(mockSecureStorage.write(key: 'token', value: 'test_token')).called(1);
+    });
+
+    test('retrive a token by key', () async {
+      var token = await tokenStorage.getToken('token');
+
+      expect(token, 'test_token');
+      verify(mockSecureStorage.read(key: 'token')).called(1);
     });
   });
 }
