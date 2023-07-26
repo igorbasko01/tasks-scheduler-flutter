@@ -42,5 +42,27 @@ void main() {
       expect(token, null);
       verify(mockSecureStorage.read(key: 'non_token')).called(1);
     });
+
+    test('getAll returns key value map', () async {
+      var all = await tokenStorage.getAll();
+
+      expect(all, {'token': 'test_token'});
+      verify(mockSecureStorage.readAll()).called(1);
+    });
+
+    test('getAll returns empty map', () async {
+      when(mockSecureStorage.readAll()).thenAnswer((_) async => {});
+
+      var all = await tokenStorage.getAll();
+
+      expect(all, {});
+      verify(mockSecureStorage.readAll()).called(1);
+    });
+
+    test('delete a token', () async {
+      await tokenStorage.deleteToken('token');
+
+      verify(mockSecureStorage.delete(key: 'token')).called(1);
+    });
   });
 }
