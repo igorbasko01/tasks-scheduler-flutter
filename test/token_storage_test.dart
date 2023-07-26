@@ -29,11 +29,18 @@ void main() {
       verify(mockSecureStorage.write(key: 'token', value: 'test_token')).called(1);
     });
 
-    test('retrive a token by key', () async {
+    test('retrieve a token by key', () async {
       var token = await tokenStorage.getToken('token');
 
       expect(token, 'test_token');
       verify(mockSecureStorage.read(key: 'token')).called(1);
+    });
+
+    test('getToken non existing key return null', () async {
+      var token = await tokenStorage.getToken('non_token');
+
+      expect(token, null);
+      verify(mockSecureStorage.read(key: 'non_token')).called(1);
     });
   });
 }
