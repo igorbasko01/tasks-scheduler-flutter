@@ -8,43 +8,33 @@ class TokenStoragePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Map<String, String>>(
-      future: tokenStorage.getAll(),
-      builder: (BuildContext context, AsyncSnapshot<Map<String, String>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(body: Center(child: CircularProgressIndicator()));
-        } else if (snapshot.hasError) {
-          return Scaffold(body: Center(child: Text('Error: ${snapshot.error}')));
-        } else {
-          // We have data !
-          Map<String, String> tokens = snapshot.data!;
-          if (tokens.isEmpty) {
-            return Scaffold(
-              appBar: AppBar(title: const Text('Tokens Page'),),
-              body: const Center(child: Text('No tokens found')),
-              floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  // Add token code here.
-                },
-                tooltip: 'Add token',
-                child: const Icon(Icons.add),
-              ),
-            );
+    return Scaffold(
+      appBar: AppBar(title: const Text('Tokens Page')),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // "Add Token" code here.
+        },
+        tooltip: 'Add token',
+        child: const Icon(Icons.add),
+      ),
+      body: FutureBuilder<Map<String, String>>(
+        future: tokenStorage.getAll(),
+        builder: (BuildContext context, AsyncSnapshot<Map<String, String>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
           } else {
-            return Scaffold(
-              appBar: AppBar(title: const Text('Tokens Page')),
-              body: const Center(child: Text('Tokens found')),
-              floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  // Add token code here.
-                },
-                tooltip: 'Add token',
-                child: const Icon(Icons.add),
-              ),
-            );
+            // We have data !
+            Map<String, String> tokens = snapshot.data!;
+            if (tokens.isEmpty) {
+              return const Center(child: Text('No tokens found'));
+            } else {
+              return const Center(child: Text('Tokens found'));
+            }
           }
-        }
-      }
+        },
+      ),
     );
   }
 }
