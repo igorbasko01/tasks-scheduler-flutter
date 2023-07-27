@@ -2,15 +2,31 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 abstract class TokenStorage {
   Future<void> saveToken(String key, String value);
+
   Future<String?> getToken(String key);
+
   Future<Map<String, String>> getAll();
+
   Future<void> deleteToken(String key);
 }
 
 class SecureTokenStorage implements TokenStorage {
-  final FlutterSecureStorage secureStorage;
+  static SecureTokenStorage? _singleton;
+  FlutterSecureStorage secureStorage;
 
-  SecureTokenStorage({required this.secureStorage});
+  SecureTokenStorage._internal(this.secureStorage);
+
+  // Singleton implementation that allows us to provide a mock of FlutterSecureStorage
+  factory SecureTokenStorage({FlutterSecureStorage? secureStorage}) {
+    _singleton ??= SecureTokenStorage._internal(
+        secureStorage ?? const FlutterSecureStorage());
+    return _singleton!;
+  }
+
+  // For testing
+  static void resetInstance() {
+    _singleton = null;
+  }
 
   @override
   Future<void> saveToken(String key, String value) async {

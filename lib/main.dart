@@ -43,7 +43,7 @@ class MyHomePage extends StatelessWidget {
                 } else if (result == 'API Tokens') {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const TokenStoragePage()),
+                    MaterialPageRoute(builder: (context) => TokenStoragePage()),
                   );
                 }
               },
