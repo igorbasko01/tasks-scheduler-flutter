@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:tasks_scheduler/screens/token_storage_page.dart';
 
 var logger = Logger();
 
@@ -37,7 +38,14 @@ class MyHomePage extends StatelessWidget {
         actions: <Widget>[
           PopupMenuButton<String>(
               onSelected: (String result) {
-                logger.i(result);
+                if (result == 'Logout') {
+                  logger.i('Logout');
+                } else if (result == 'API Tokens') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const TokenStoragePage()),
+                  );
+                }
               },
               itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
                     const PopupMenuItem<String>(
