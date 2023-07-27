@@ -14,9 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Tasks Scheduler',
-      theme: ThemeData(
-        primarySwatch: Colors.blue
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       home: const MyHomePage(title: 'Tasks Scheduler Home Page'),
     );
   }
@@ -36,6 +34,24 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
+        actions: <Widget>[
+          PopupMenuButton<String>(
+              onSelected: (String result) {
+                logger.i(result);
+              },
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                    const PopupMenuItem<String>(
+                      value: 'API Tokens',
+                      child: Text('Api Tokens'),
+                    ),
+                    const PopupMenuItem<String>(
+                      value: 'Logout',
+                      child: Text('Logout'),
+                    ),
+                  ],
+              icon: const Icon(Icons.menu)
+          )
+        ],
       ),
       body: Center(
         child: ElevatedButton(
