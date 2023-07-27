@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:tasks_scheduler/token_storage.dart';
+import 'package:tasks_scheduler/services/token_storage.dart';
 
 @GenerateNiceMocks([MockSpec<FlutterSecureStorage>()])
 import 'token_storage_test.mocks.dart';
