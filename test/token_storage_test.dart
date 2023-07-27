@@ -12,6 +12,7 @@ void main() {
   late FlutterSecureStorage mockSecureStorage;
 
   setUp(() {
+    SecureTokenStorage.resetInstance();
     mockSecureStorage = MockFlutterSecureStorage();
     when(mockSecureStorage.read(key: 'token')).thenAnswer((_) async => 'test_token');
     when(mockSecureStorage.read(key: 'non_token')).thenAnswer((_) async => null);
