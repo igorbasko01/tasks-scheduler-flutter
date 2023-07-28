@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:tasks_scheduler/services/token_storage.dart';
 
 class TokenStoragePage extends StatelessWidget {
-  final SecureTokenStorage tokenStorage = SecureTokenStorage();
+  final TokenStorage tokenStorage;
 
-  TokenStoragePage({Key? key}) : super(key: key);
+  TokenStoragePage({Key? key, TokenStorage? tokenStorage})
+      : tokenStorage = tokenStorage ?? SecureTokenStorage(),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,8 @@ class TokenStoragePage extends StatelessWidget {
       ),
       body: FutureBuilder<Map<String, String>>(
         future: tokenStorage.getAll(),
-        builder: (BuildContext context, AsyncSnapshot<Map<String, String>> snapshot) {
+        builder: (BuildContext context,
+            AsyncSnapshot<Map<String, String>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
