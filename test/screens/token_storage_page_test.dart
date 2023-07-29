@@ -35,4 +35,25 @@ void main() {
 
     expect(find.text('Tokens found'), findsOneWidget);
   });
+  
+  testWidgets('Token dialog test', (tester) async {
+    await tester.pumpWidget(MaterialApp(
+      home: TokenStoragePage(tokenStorage: tokenStorage),
+    ));
+    await tester.tap(find.byType(FloatingActionButton));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AlertDialog), findsOneWidget);
+    expect(find.byType(TextField), findsNWidgets(2));
+    expect(find.byType(TextButton), findsNWidgets(2));
+
+    await tester.enterText(find.widgetWithText(TextField, 'Enter Key'), 'test_key');
+    await tester.enterText(find.widgetWithText(TextField, 'Enter token'), 'test_token');
+
+    await tester.tap(find.widgetWithText(TextButton, 'Add'));
+    await tester.pumpAndSettle();
+    expect(find.byType(AlertDialog), findsNothing);
+
+    verify(tokenStorage.saveToken('test_key', 'test_token')).called(1);
+  });
 }
