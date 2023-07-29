@@ -17,6 +17,7 @@ void main() {
 
   testWidgets(
       'TokenStoragePage shows "No tokens found" when there are no tokens', (tester) async {
+    when(tokenStorage.allTokensStream).thenAnswer((_) => Stream.value({}));
     when(tokenStorage.getAll()).thenAnswer((_) async => {});
     await tester.pumpWidget(MaterialApp(
       home: TokenStoragePage(tokenStorage: tokenStorage),
@@ -27,6 +28,7 @@ void main() {
       });
   
   testWidgets('TokenStoragePage shows "Tokens found" when there are tokens', (tester) async {
+    when(tokenStorage.allTokensStream).thenAnswer((_) => Stream.value({'token': 'test_token'}));
     when(tokenStorage.getAll()).thenAnswer((_) async => {'token': 'test_token'});
     await tester.pumpWidget(MaterialApp(
       home: TokenStoragePage(tokenStorage: tokenStorage),
@@ -34,5 +36,26 @@ void main() {
     await tester.pump();
 
     expect(find.text('Tokens found'), findsOneWidget);
+  });
+  
+  testWidgets('Token dialog test', (tester) async {
+    await tester.pumpWidget(MaterialApp(
+      home: TokenStoragePage(tokenStorage: tokenStorage),
+    ));
+    await tester.tap(find.byType(FloatingActionButton));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AlertDialog), findsOneWidget);
+    expect(find.byType(TextField), findsNWidgets(2));
+    expect(find.byType(TextButton), findsNWidgets(2));
+
+    await tester.enterText(find.widgetWithText(TextField, 'Enter Key'), 'test_key');
+    await tester.enterText(find.widgetWithText(TextField, 'Enter token'), 'test_token');
+
+    await tester.tap(find.widgetWithText(TextButton, 'Add'));
+    await tester.pumpAndSettle();
+    expect(find.byType(AlertDialog), findsNothing);
+
+    verify(tokenStorage.saveToken('test_key', 'test_token')).called(1);
   });
 }

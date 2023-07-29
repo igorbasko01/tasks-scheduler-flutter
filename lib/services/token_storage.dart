@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 abstract class TokenStorage {
@@ -8,13 +10,20 @@ abstract class TokenStorage {
   Future<Map<String, String>> getAll();
 
   Future<void> deleteToken(String key);
+
+  Stream<Map<String, String>> get allTokensStream;
+
+  Future<void> refreshTokens();
 }
 
 class SecureTokenStorage implements TokenStorage {
   static SecureTokenStorage? _singleton;
   FlutterSecureStorage secureStorage;
+  final _allTokensStreamController = StreamController<Map<String, String>>.broadcast();
 
-  SecureTokenStorage._internal(this.secureStorage);
+  SecureTokenStorage._internal(this.secureStorage) {
+    _updateTokensStream();
+  }
 
   // Singleton implementation that allows us to provide a mock of FlutterSecureStorage
   factory SecureTokenStorage({FlutterSecureStorage? secureStorage}) {
@@ -29,8 +38,17 @@ class SecureTokenStorage implements TokenStorage {
   }
 
   @override
+  Future<void> refreshTokens() async {
+    _updateTokensStream();
+  }
+
+  @override
+  Stream<Map<String, String>> get allTokensStream => _allTokensStreamController.stream;
+
+  @override
   Future<void> saveToken(String key, String value) async {
     await secureStorage.write(key: key, value: value);
+    _updateTokensStream();
   }
 
   @override
@@ -44,7 +62,12 @@ class SecureTokenStorage implements TokenStorage {
   }
 
   @override
-  Future<void> deleteToken(String key) {
-    return secureStorage.delete(key: key);
+  Future<void> deleteToken(String key) async {
+    await secureStorage.delete(key: key);
+    _updateTokensStream();
+  }
+
+  Future<void> _updateTokensStream() async {
+    _allTokensStreamController.add(await getAll());
   }
 }
