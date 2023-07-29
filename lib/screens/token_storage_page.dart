@@ -32,7 +32,7 @@ class TokenStoragePage extends StatelessWidget {
             if (tokens == null || tokens.isEmpty) {
               return const Center(child: Text('No tokens found'));
             } else {
-              return const Center(child: Text('Tokens found'));
+              return _createTokensListView(tokens);
             }
           }
         },
@@ -80,6 +80,25 @@ class TokenStoragePage extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+
+  ListView _createTokensListView(Map<String, String> tokens) {
+    return ListView.builder(
+        itemCount: tokens.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text('Key: ${tokens.keys.elementAt(index)}'),
+            subtitle: Text('Value: ${tokens.values.elementAt(index)}'),
+            trailing: IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () {
+                // Add deletion logic here.
+                //tokenStorage.deleteToken(tokens.keys.elementAt(index));
+              },
+            ),
+          );
+        }
     );
   }
 }

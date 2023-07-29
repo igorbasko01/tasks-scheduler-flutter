@@ -35,7 +35,10 @@ void main() {
     ));
     await tester.pump();
 
-    expect(find.text('Tokens found'), findsOneWidget);
+    // expect(find.text('Tokens found'), findsOneWidget);
+    expect(find.text('Key: token'), findsOneWidget);
+    expect(find.text('Value: test_token'), findsOneWidget);
+    expect(find.byIcon(Icons.delete), findsOneWidget);
   });
   
   testWidgets('Token dialog test', (tester) async {
