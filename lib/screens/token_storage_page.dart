@@ -93,8 +93,7 @@ class TokenStoragePage extends StatelessWidget {
             trailing: IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () {
-                // Add deletion logic here.
-                //tokenStorage.deleteToken(tokens.keys.elementAt(index));
+                tokenStorage.deleteToken(tokens.keys.elementAt(index));
               },
             ),
           );

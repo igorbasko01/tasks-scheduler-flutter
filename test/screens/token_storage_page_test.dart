@@ -35,7 +35,6 @@ void main() {
     ));
     await tester.pump();
 
-    // expect(find.text('Tokens found'), findsOneWidget);
     expect(find.text('Key: token'), findsOneWidget);
     expect(find.text('Value: test_token'), findsOneWidget);
     expect(find.byIcon(Icons.delete), findsOneWidget);
@@ -60,5 +59,17 @@ void main() {
     expect(find.byType(AlertDialog), findsNothing);
 
     verify(tokenStorage.saveToken('test_key', 'test_token')).called(1);
+  });
+
+  testWidgets('TokenStoragePage calls SecureTokenStorage delete when the delete icon pressed', (tester) async {
+    when(tokenStorage.allTokensStream).thenAnswer((_) => Stream.value({'token': 'test_token'}));
+    await tester.pumpWidget(MaterialApp(
+      home: TokenStoragePage(tokenStorage: tokenStorage),
+    ));
+    await tester.pump();
+
+    await tester.tap(find.byIcon(Icons.delete));
+
+    verify(tokenStorage.deleteToken('token')).called(1);
   });
 }
