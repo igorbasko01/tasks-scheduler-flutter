@@ -24,6 +24,12 @@ import 'package:tasks_scheduler/services/token_storage.dart' as _i2;
 /// See the documentation for Mockito's code generation for more information.
 class MockTokenStorage extends _i1.Mock implements _i2.TokenStorage {
   @override
+  _i3.Stream<Map<String, String>> get allTokensStream => (super.noSuchMethod(
+        Invocation.getter(#allTokensStream),
+        returnValue: _i3.Stream<Map<String, String>>.empty(),
+        returnValueForMissingStub: _i3.Stream<Map<String, String>>.empty(),
+      ) as _i3.Stream<Map<String, String>>);
+  @override
   _i3.Future<void> saveToken(
     String? key,
     String? value,
@@ -63,6 +69,15 @@ class MockTokenStorage extends _i1.Mock implements _i2.TokenStorage {
         Invocation.method(
           #deleteToken,
           [key],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+  @override
+  _i3.Future<void> refreshTokens() => (super.noSuchMethod(
+        Invocation.method(
+          #refreshTokens,
+          [],
         ),
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),

@@ -17,6 +17,7 @@ void main() {
 
   testWidgets(
       'TokenStoragePage shows "No tokens found" when there are no tokens', (tester) async {
+    when(tokenStorage.allTokensStream).thenAnswer((_) => Stream.value({}));
     when(tokenStorage.getAll()).thenAnswer((_) async => {});
     await tester.pumpWidget(MaterialApp(
       home: TokenStoragePage(tokenStorage: tokenStorage),
@@ -27,6 +28,7 @@ void main() {
       });
   
   testWidgets('TokenStoragePage shows "Tokens found" when there are tokens', (tester) async {
+    when(tokenStorage.allTokensStream).thenAnswer((_) => Stream.value({'token': 'test_token'}));
     when(tokenStorage.getAll()).thenAnswer((_) async => {'token': 'test_token'});
     await tester.pumpWidget(MaterialApp(
       home: TokenStoragePage(tokenStorage: tokenStorage),

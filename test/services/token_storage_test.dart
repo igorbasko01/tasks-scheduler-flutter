@@ -48,7 +48,8 @@ void main() {
       var all = await tokenStorage.getAll();
 
       expect(all, {'token': 'test_token'});
-      verify(mockSecureStorage.readAll()).called(1);
+      // getAll calls readAll twice, once in the constructor and once in getAll
+      verify(mockSecureStorage.readAll()).called(2);
     });
 
     test('getAll returns empty map', () async {
@@ -57,7 +58,8 @@ void main() {
       var all = await tokenStorage.getAll();
 
       expect(all, {});
-      verify(mockSecureStorage.readAll()).called(1);
+      // getAll calls readAll twice, once in the constructor and once in getAll
+      verify(mockSecureStorage.readAll()).called(2);
     });
 
     test('delete a token', () async {
