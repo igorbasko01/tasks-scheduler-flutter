@@ -33,6 +33,7 @@ dependencies:
 
   logger: ^1.4.0
   flutter_secure_storage: ^8.0.0
+  http: ^1.1.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -42,6 +43,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  test: ^1.16.9  # For integration tests, use the test package.
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
