@@ -15,22 +15,27 @@ class KanbanFlowBoard extends Equatable {
       required this.colors});
 
   factory KanbanFlowBoard.fromJson(Map<String, dynamic> json) {
-    var columns = json['columns'] as List;
-    var swimlanes = json['swimlanes'] as List;
-    var colors = json['colors'] as List;
+    var columns = json['columns'] as List? ?? [];
+    var swimlanes = json['swimlanes'] as List? ?? [];
+    var colors = json['colors'] as List? ?? [];
     return KanbanFlowBoard(
       id: json['_id'],
       name: json['name'],
       columns: columns
-          .map((column) => KanbanFlowColumn(id: column['uniqueId'], name: column['name']))
-          .toList(),
+          .map((column) => KanbanFlowColumn.fromJson(column))
+          .where((column) => column != null)
+          .toList()
+          .cast<KanbanFlowColumn>(),
       swimlanes: swimlanes
-          .map((swimlane) =>
-              KanbanFlowSwimlane(id: swimlane['uniqueId'], name: swimlane['name']))
-          .toList(),
+          .map((swimlane) => KanbanFlowSwimlane.fromJson(swimlane))
+          .where((swimlane) => swimlane != null)
+          .toList()
+          .cast<KanbanFlowSwimlane>(),
       colors: colors
-          .map((color) => KanbanFlowColor(name: color['name'], value: color['value']))
-          .toList(),
+          .map((color) => KanbanFlowColor.fromJson(color))
+          .where((color) => color != null)
+          .toList()
+          .cast<KanbanFlowColor>(),
     );
   }
 
@@ -44,6 +49,13 @@ class KanbanFlowColumn extends Equatable {
 
   const KanbanFlowColumn({required this.id, required this.name});
 
+  static KanbanFlowColumn? fromJson(Map<String, dynamic> json) {
+    if (json.containsKey('uniqueId') && json.containsKey('name')) {
+      return KanbanFlowColumn(id: json['uniqueId'], name: json['name']);
+    }
+    return null;
+  }
+
   @override
   List<Object> get props => [id, name];
 }
@@ -54,6 +66,13 @@ class KanbanFlowSwimlane extends Equatable {
 
   const KanbanFlowSwimlane({required this.id, required this.name});
 
+  static KanbanFlowSwimlane? fromJson(Map<String, dynamic> json) {
+    if (json.containsKey('uniqueId') && json.containsKey('name')) {
+      return KanbanFlowSwimlane(id: json['uniqueId'], name: json['name']);
+    }
+    return null;
+  }
+
   @override
   List<Object> get props => [id, name];
 }
@@ -63,6 +82,13 @@ class KanbanFlowColor extends Equatable {
   final String value;
 
   const KanbanFlowColor({required this.name, required this.value});
+
+  static KanbanFlowColor? fromJson(Map<String, dynamic> json) {
+    if (json.containsKey('name') && json.containsKey('value')) {
+      return KanbanFlowColor(name: json['name'], value: json['value']);
+    }
+    return null;
+  }
 
   @override
   List<Object> get props => [name, value];
